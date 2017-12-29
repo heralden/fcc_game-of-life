@@ -22,10 +22,9 @@ class App extends Component {
   updateCells = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
+    const cells = Math.floor(width / 12) * Math.floor(height / 12);
 
-    this.setState({
-      cells: Math.floor((height * width) / 144)
-    });
+    this.setState({ cells });
   }
 
   render() {
