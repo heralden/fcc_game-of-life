@@ -11,11 +11,15 @@
   background-color: #000;
 }
 
-.App-cell {
+.cell {
   width: 12px;
   height: 12px;
   border-top: 1px solid #333;
   border-left: 1px solid #222;
   background-color: #000;
   box-sizing: border-box;
+}
+
+.active {
+  background-color: #fff;
 }
