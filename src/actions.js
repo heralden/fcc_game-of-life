@@ -1,3 +1,6 @@
+import countBy from 'lodash/countBy';
+import flatten from 'lodash/flatten';
+
 export function cellArray(width, height) {
   return Array(height).fill(
     Array(width).fill(false)
@@ -54,6 +57,32 @@ export function neighboringCells(cells, y, x) {
 }
 
 export function updateCells(cells) {
-  // WIP
+  const liveCells = [];
+  let liberties = {};
+
+  cells.forEach((arr, y) => arr.forEach((e, x) => {
+    if (e) liveCells.push({ y, x });
+  }));
+
+  if (liveCells.length) {
+    liberties = countBy(flatten(
+      liveCells.map(e => 
+        neighboringCells(cells, e.y, e.x)
+      )
+    ), (e) => e.y + ',' + e.x);
+    // This creates an object containing a count of how
+    // many live neighboring cells each coordinates have.
+  }
+
+  for (let yx in liberties) {
+    const liveNeighbors = liberties[yx];
+    const [ y, x ] = yx.split(',');
+
+    if (liveNeighbors === 3)
+      cells = setCell(cells, y, x, true);
+    else if (liveNeighbors !== 2)
+      cells = setCell(cells, y, x, false);
+  }
+
   return cells;
 }
