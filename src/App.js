@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { cellArray, setCell } from './actions';
+import { cellArray, setCell, updateCells } from './actions';
 
 class App extends Component {
   constructor(props) {
@@ -16,16 +16,18 @@ class App extends Component {
   }
   componentDidMount() {
     window.addEventListener('resize', this.recreateCells);
-    /*
     this.interval = setInterval(
-      () => updateCells(this.state.cells),
-      500
+      () => {
+        this.setState((prevState) => ({
+          cells: updateCells(prevState.cells)
+        }));
+      },
+      2000
     );
-    */
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.recreateCells);
-    //clearInterval(this.interval);
+    clearInterval(this.interval);
   }
 
   recreateCells = () => {
