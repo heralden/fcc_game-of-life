@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
-import { cellArray, setCell, updateCells } from './actions';
+import { 
+  setCell, 
+  updateCells, 
+  recreateCells
+} from './actions';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cellCount: 0,
       cells: null
     };
   }
 
   componentWillMount() {
-    this.recreateCells();
+    this.handleResize();
   }
   componentDidMount() {
-    window.addEventListener('resize', this.recreateCells);
+    window.addEventListener('resize', this.handleResize);
     this.interval = setInterval(
       () => {
         this.setState((prevState) => ({
@@ -26,18 +29,12 @@ class App extends Component {
     );
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.recreateCells);
+    window.removeEventListener('resize', this.handleResize);
     clearInterval(this.interval);
   }
 
-  recreateCells = () => {
-    const cellsWidth = Math.floor(window.innerWidth / 12);
-    const cellsHeight = Math.floor(window.innerHeight / 12);
-
-    const cellCount = cellsWidth * cellsHeight;
-    const cells = cellArray(cellsWidth, cellsHeight);
-
-    this.setState({ cellCount, cells });
+  handleResize = () => {
+    this.setState(recreateCells);
   }
 
   cellClick = (e, index) => {

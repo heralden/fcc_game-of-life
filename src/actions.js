@@ -17,6 +17,49 @@ export function setCell(cells, y, x, val) {
   return newCells;
 }
 
+export function recreateCells({ cells }) {
+  let notEmpty = false;
+  if (cells)
+    notEmpty = cells
+      .some(arr => arr.some(e => e === true));
+
+  const cellsWidth = Math.floor(window.innerWidth / 12);
+  const cellsHeight = Math.floor(window.innerHeight / 12);
+
+  if (notEmpty) {
+
+    const oldWidth = cells[0].length;
+    const oldHeight = cells.length;
+
+    let newCells = copyCells(cells);
+
+    if (cellsWidth > oldWidth) {
+      newCells = newCells.map(arr => arr.concat(
+        Array(cellsWidth - oldWidth).fill(false)
+      ));
+    } else if (cellsWidth < oldWidth) {
+      newCells = newCells.map(arr => arr.slice(0, cellsWidth));
+    }
+
+    if (cellsHeight > oldHeight) {
+      newCells = newCells.concat(Array(cellsHeight - oldHeight).fill(
+        Array(cellsWidth).fill(false)
+      ));
+    } else if (cellsHeight < oldHeight) {
+      newCells.length = cellsHeight;
+    }
+
+    return { 
+      cells: newCells 
+    };
+
+  } else {
+    return { 
+      cells: cellArray(cellsWidth, cellsHeight)
+    };
+  }
+}
+
 export function neighboringCells(cells, y, x) {
   const width = cells[0].length;
   const height = cells.length;
