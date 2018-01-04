@@ -60,6 +60,7 @@ export function updateCells(cells) {
   const liveCells = [];
   let liberties = {};
 
+  // Populate liveCells array
   cells.forEach((arr, y) => arr.forEach((e, x) => {
     if (e) liveCells.push({ y, x });
   }));
@@ -71,9 +72,10 @@ export function updateCells(cells) {
       )
     ), (e) => e.y + ',' + e.x);
     // This creates an object containing a count of how
-    // many live neighboring cells each coordinates have.
+    // many live neighboring cells each coordinates have
   }
 
+  // Determine life/death of liberty cells
   for (let yx in liberties) {
     const liveNeighbors = liberties[yx];
     const [ y, x ] = yx.split(',');
@@ -83,6 +85,16 @@ export function updateCells(cells) {
     else if (liveNeighbors !== 2)
       cells = setCell(cells, y, x, false);
   }
+
+  // Kill off lone living cells
+  liveCells.forEach((e) => {
+    const isAlone = neighboringCells(cells, e.y, e.x)
+      .map(e => cells[e.y][e.x])
+      .every(e => e === false);
+
+    if (isAlone)
+      cells = setCell(cells, e.y, e.x, false);
+  });
 
   return cells;
 }
