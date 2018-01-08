@@ -17,6 +17,14 @@ export function setCell(cells, y, x, val) {
   return newCells;
 }
 
+export function setMultiple(cells, val, ...yxs) {
+  yxs.forEach(e => {
+    const [ y, x ] = e;
+    cells = setCell(cells, y, x, val);
+  });
+  return cells;
+}
+
 export function recreateCells({ cells }) {
   let notEmpty = false;
   if (cells)

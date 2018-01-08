@@ -2,6 +2,7 @@ import {
   cellArray,
   copyCells,
   setCell,
+  setMultiple,
   neighboringCells,
   updateCells
 } from './actions';
@@ -41,17 +42,41 @@ it('returns an array of all 8 neighboring cell coordinates', () => {
   ]);
 });
 
-it('returns a cell array of the proceeding generation', () => {
+it('returns a cell array with setMultiple that is equivalent of multiple setCell calls', () => {
   let cells = cellArray(6, 4);
-  cells = setCell(cells, 0, 1, true);
-  cells = setCell(cells, 1, 1, true);
-  cells = setCell(cells, 2, 1, true);
-  cells = updateCells(cells);
+  cells = setMultiple(cells, true, [0,0], [0,1]);
 
   let targetCells = cellArray(6, 4);
-  targetCells = setCell(targetCells, 1, 0, true);
-  targetCells = setCell(targetCells, 1, 1, true);
-  targetCells = setCell(targetCells, 1, 2, true);
+  targetCells = setCell(targetCells, 0, 0, true);
+  targetCells = setCell(targetCells, 0, 1, true);
 
   expect(cells).toEqual(targetCells);
+});
+
+describe('updateCells', () => {
+
+  it('generates blinker', () => {
+    let cells = setMultiple(cellArray(6, 4), true,
+      [0,1], [1,1], [2,1]
+    );
+    cells = updateCells(cells);
+
+    let targetCells = setMultiple(cellArray(6, 4), true,
+      [1,0], [1,1], [1,2]
+    );
+
+    expect(cells).toEqual(targetCells);
+  });
+
+  it('kills lone cells', () => {
+    let cells = setCell(
+      cellArray(6, 4), 0, 0, true
+    );
+    cells = updateCells(cells);
+
+    const targetCells = cellArray(6, 4);
+
+    expect(cells).toEqual(targetCells);
+  });
+
 });
