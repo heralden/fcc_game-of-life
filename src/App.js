@@ -5,12 +5,14 @@ import {
   updateCells, 
   recreateCells
 } from './actions';
+import flatten from 'lodash/flatten';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cells: null
+      cells: null,
+      gen: 0
     };
   }
 
@@ -21,9 +23,18 @@ class App extends Component {
     window.addEventListener('resize', this.handleResize);
     this.interval = setInterval(
       () => {
-        this.setState((prevState) => ({
-          cells: updateCells(prevState.cells)
-        }));
+        this.setState((prevState) => {
+          const newCells = updateCells(prevState.cells);
+
+          let nextGen = 0;
+          if (flatten(newCells).some(e => e === true))
+            nextGen = prevState.gen + 1;
+
+          return {
+            cells: newCells,
+            gen: nextGen
+          };
+        });
       },
       2000
     );
@@ -50,15 +61,17 @@ class App extends Component {
   }
 
   render() {
-    const flattenedCells = [].concat.apply([], this.state.cells);
+    const flattenedCells = flatten(this.state.cells);
+    const noLife = flattenedCells.every((e) => e === false);
 
     return (
       <div className="App">
 
-        {flattenedCells.every((e) => e === false) ?
-          <Intro show/> :
-          <Intro /> 
-        }
+        <span className="generation">
+          {this.state.gen}
+        </span>
+
+        {noLife ? <Intro show/> : <Intro />}
 
         {flattenedCells.map((e, i) => (
           <div className={e ? "cell active" : "cell"}

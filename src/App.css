@@ -48,3 +48,14 @@
   font-size: 15px;
   padding: 30px;
 }
+
+.generation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+  opacity: 0.3;
+  font-size: 40vw;
+  pointer-events: none;
+}
