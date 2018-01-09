@@ -55,6 +55,11 @@ class App extends Component {
     return (
       <div className="App">
 
+        {flattenedCells.every((e) => e === false) ?
+          <Intro show/> :
+          <Intro /> 
+        }
+
         {flattenedCells.map((e, i) => (
           <div className={e ? "cell active" : "cell"}
             onClick={(e) => this.cellClick(e, i)}
@@ -68,3 +73,15 @@ class App extends Component {
 }
 
 export default App;
+
+const Intro = ({ show }) => (
+  <div className={show ? "intro show" : "intro"}>
+    <ul>
+      <li>Resize or zoom your window to change the board size</li>
+      <li>Press the space key to pause and resume the game</li>
+      <li>Click on any cell to toggle life</li>
+      <li>Press the delete key to clear the board</li>
+      <li>Use the left and right arrow keys to adjust the update interval</li>
+    </ul>
+  </div>
+);
