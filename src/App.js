@@ -6,6 +6,7 @@ import {
   recreateCells
 } from './actions';
 import flatten from 'lodash/flatten';
+import key from 'keymaster';
 
 class App extends Component {
   constructor(props) {
@@ -16,11 +17,8 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
-    this.handleResize();
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
+  startGame = () => {
+    this.running = true;
     this.interval = setInterval(
       () => {
         this.setState((prevState) => {
@@ -36,12 +34,32 @@ class App extends Component {
           };
         });
       },
-      2000
+      500
     );
+  }
+
+  componentWillMount() {
+    this.handleResize();
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+    this.startGame();
+    key('space', this.handlePause);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
     clearInterval(this.interval);
+    this.running = false;
+    key.unbind('space');
+  }
+
+  handlePause = () => {
+    if (this.running) {
+      clearInterval(this.interval);
+      this.running = false;
+    } else {
+      this.startGame();
+    }
   }
 
   handleResize = () => {
