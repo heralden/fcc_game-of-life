@@ -59,3 +59,7 @@
   font-size: 40vw;
   pointer-events: none;
 }
+
+span.red { 
+  color: red;
+}

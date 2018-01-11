@@ -109,10 +109,16 @@ const Intro = ({ show }) => (
   <div className={show ? "intro show" : "intro"}>
     <ul>
       <li>Resize or zoom your window to change the board size</li>
-      <li>Press the space key to pause and resume the game</li>
+      <li>Press the <Red>space</Red> key to pause and resume the game</li>
       <li>Click on any cell to toggle life</li>
-      <li>Press the delete key to clear the board</li>
-      <li>Use the left and right arrow keys to adjust the update interval</li>
+      <li>Press the <Red>delete</Red> key to clear the board</li>
+      <li>Use the <Red>left</Red> and <Red>right</Red> arrow keys to adjust the game speed</li>
     </ul>
   </div>
+);
+
+const Red = (props) => (
+  <span className="red">
+    {props.children}
+  </span>
 );
