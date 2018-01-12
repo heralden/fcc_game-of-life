@@ -49,6 +49,7 @@ class App extends Component {
     key('space', this.handlePause);
     key('left', () => this.handleSpeed('left'));
     key('right', () => this.handleSpeed('right'));
+    key('delete', this.handleClear);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -57,6 +58,7 @@ class App extends Component {
     key.unbind('space');
     key.unbind('left');
     key.unbind('right');
+    key.unbind('delete');
   }
 
   handlePause = () => {
@@ -80,6 +82,15 @@ class App extends Component {
     } else {
       this.time = time;
     }
+  }
+
+  handleClear = () => {
+    this.setState((prevState) => ({
+      cells: prevState.cells.map(
+        arr => arr.map(e => false)
+      ),
+      gen: 0
+    }));
   }
 
   handleResize = () => {
