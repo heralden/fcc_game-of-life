@@ -17,8 +17,10 @@ class App extends Component {
     };
   }
 
-  startGame = () => {
+  startGame = (time) => {
+    clearInterval(this.interval);
     this.running = true;
+    this.time = time;
     this.interval = setInterval(
       () => {
         this.setState((prevState) => {
@@ -34,7 +36,7 @@ class App extends Component {
           };
         });
       },
-      500
+      time
     );
   }
 
@@ -43,14 +45,18 @@ class App extends Component {
   }
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
-    this.startGame();
+    this.startGame(500);
     key('space', this.handlePause);
+    key('left', () => this.handleSpeed('left'));
+    key('right', () => this.handleSpeed('right'));
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
     clearInterval(this.interval);
     this.running = false;
     key.unbind('space');
+    key.unbind('left');
+    key.unbind('right');
   }
 
   handlePause = () => {
@@ -58,7 +64,21 @@ class App extends Component {
       clearInterval(this.interval);
       this.running = false;
     } else {
-      this.startGame();
+      this.startGame(this.time);
+    }
+  }
+
+  handleSpeed = (dir) => {
+    let time = this.time;
+    if (dir === 'right' && time > 100) {
+      time -= 100;
+    } else if (dir === 'left') {
+      time += 100;
+    }
+    if (this.running) {
+      this.startGame(time);
+    } else {
+      this.time = time;
     }
   }
 
