@@ -13,7 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       cells: null,
-      gen: 0
+      gen: 0,
+      demo: true
     };
   }
 
@@ -41,7 +42,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.handleResize();
+    this.setState((prevState) => recreateCells(prevState, true));
   }
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
@@ -89,7 +90,8 @@ class App extends Component {
       cells: prevState.cells.map(
         arr => arr.map(e => false)
       ),
-      gen: 0
+      gen: 0,
+      demo: false
     }));
   }
 
@@ -105,7 +107,8 @@ class App extends Component {
     const val = !e.target.className.includes('active');
 
     this.setState((prevState) => ({
-      cells: setCell(prevState.cells, y, x, val)
+      cells: setCell(prevState.cells, y, x, val),
+      demo: false
     }));
   }
 
@@ -120,7 +123,7 @@ class App extends Component {
           {this.state.gen}
         </span>
 
-        {noLife ? <Intro show/> : <Intro />}
+        {noLife || this.state.demo ? <Intro show/> : <Intro />}
 
         {flattenedCells.map((e, i) => (
           <div className={e ? "cell active" : "cell"}
@@ -141,7 +144,7 @@ const Intro = ({ show }) => (
     <ul>
       <li>Resize or zoom your window to change the board size</li>
       <li>Press the <Red>space</Red> key to pause and resume the game</li>
-      <li>Click on any cell to toggle life</li>
+      <li><Red>Click</Red> on any cell to toggle life</li>
       <li>Press the <Red>delete</Red> key to clear the board</li>
       <li>Use the <Red>left</Red> and <Red>right</Red> arrow keys to adjust the game speed</li>
     </ul>

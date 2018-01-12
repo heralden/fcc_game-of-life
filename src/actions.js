@@ -25,7 +25,15 @@ export function setMultiple(cells, val, ...yxs) {
   return cells;
 }
 
-export function recreateCells({ cells }) {
+function randomCell(freq) {
+  if (Math.random() < freq) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function recreateCells({ cells }, random = false) {
   let notEmpty = false;
   if (cells)
     notEmpty = cells
@@ -62,9 +70,13 @@ export function recreateCells({ cells }) {
     };
 
   } else {
-    return { 
-      cells: cellArray(cellsWidth, cellsHeight)
-    };
+    let cells = cellArray(cellsWidth, cellsHeight);
+    if (random) {
+      cells = cells.map(arr => arr.map(
+        e => randomCell(0.1)
+      ));
+    }
+    return { cells };
   }
 }
 
