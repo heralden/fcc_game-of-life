@@ -31,8 +31,8 @@ export function recreateCells({ cells }) {
     notEmpty = cells
       .some(arr => arr.some(e => e === true));
 
-  const cellsWidth = Math.floor(window.innerWidth / 12);
-  const cellsHeight = Math.floor(window.innerHeight / 12);
+  const cellsWidth = Math.floor(window.innerWidth / 15);
+  const cellsHeight = Math.floor(window.innerHeight / 15);
 
   if (notEmpty) {
 
